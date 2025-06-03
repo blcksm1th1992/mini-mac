@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  radius:
+    image: freeradius/freeradius-server:latest
+    volumes:
+      - ./config/radiusd.conf:/etc/freeradius/3.0/radiusd.conf
+      - ./config/clients.conf:/etc/freeradius/3.0/clients.conf
+    ports:
+      - "1812:1812/udp"
+    depends_on:
+      - ldap
+
+  ldap:
+    image: bitnami/openldap:2.6.6
+    ports:
+      - "389:389"
+    environment:
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=adminpassword
+    volumes:
+      - ./ldap:/bitnami/openldap
